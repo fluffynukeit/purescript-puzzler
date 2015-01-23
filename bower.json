@@ -1,0 +1,22 @@
+{
+  "name": "purescript-puzzler",
+  "version": "0.0.1",
+  "moduleType": [
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output"
+  ],
+  "dependencies": {
+    "purescript-arrays":"*",
+    "purescript-maybe":"*",
+    "purescript-random":"*",
+    "purescript-control":"*",
+    "purescript-foldable-traversable":"*",
+    "purescript-virtual-dom":"purescript-contrib/purescript-virtual-dom#master",
+    "purescript-signal":"*"
+  }
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8"/>
+    <link href='http://fonts.googleapis.com/css?family=Chewy' rel='stylesheet' type='text/css'>
+    <title>Purescipt Puzzler!</title>
+    <script src="index.js" type="text/javascript"></script>
+  </head>
+<body>
+  <style>
+    #title {font-size: x-large;}
+    #view { margin: auto; 
+            width:70%; 
+            border:2px solid; 
+            border-radius:20px;
+            padding: 20px;
+            min-height:250px;
+            overflow:hidden;
+          }
+    rect { stroke:black; }
+    rect.empty { fill: white; }
+    rect.obstacle { fill:black; stroke:red; }
+    rect.valid {fill:green; fill-opacity:0.5;}
+    rect.invalid {fill:red; fill-opacity:0.5;}
+    .header { text-align:center; font-family: 'Chewy', cursive; }
+    #board {float:left; height:100%;}
+    #pieces-area {width:67%; margin-left:33%;}
+    #pieces {}
+    .piece {display:inline-block; margin:5px; }
+    .selected {border:2px solid red; border-radius:5px;}
+    #instructions { font-family: 'Chewy', cursive
+                  ; font-size:medium
+                  ; text-align:right
+                  ; float:right
+                  ;}
+    #buttons { float: right; clear:both;}
+  </style>
+</body>
+</html>
