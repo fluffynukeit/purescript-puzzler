@@ -3189,29 +3189,29 @@ var Prelude = require("Prelude");
 var Model = require("Model");
 var View = require("View");
 var Signal = require("Signal");
-var intent = function (_48) {
-    if (_48 instanceof View.Init) {
+var intent = function (_45) {
+    if (_45 instanceof View.Init) {
         return [  ];
     };
-    if (_48 instanceof View.PieceClicked) {
-        return [ new Model.TogglePiece(_48.value0) ];
+    if (_45 instanceof View.PieceClicked) {
+        return [ new Model.TogglePiece(_45.value0) ];
     };
-    if (_48 instanceof View.SquareEntered) {
-        return [ new Model.TargetDrop(_48.value0, _48.value1) ];
+    if (_45 instanceof View.SquareEntered) {
+        return [ new Model.TargetDrop(_45.value0, _45.value1) ];
     };
-    if (_48 instanceof View.SquareExited) {
-        return [ new Model.DiscardDrop(_48.value0, _48.value1) ];
+    if (_45 instanceof View.SquareExited) {
+        return [ new Model.DiscardDrop(_45.value0, _45.value1) ];
     };
-    if (_48 instanceof View.SquareClicked) {
-        return [ new Model.Drop(_48.value0, _48.value1) ];
+    if (_45 instanceof View.SquareClicked) {
+        return [ new Model.Drop(_45.value0, _45.value1) ];
     };
-    if (_48 instanceof View.SquareDblClicked) {
-        return [ new Model.Remove(_48.value0, _48.value1, _48.value2) ];
+    if (_45 instanceof View.SquareDblClicked) {
+        return [ new Model.Remove(_45.value0, _45.value1, _45.value2) ];
     };
-    if (_48 instanceof View.HintClicked) {
+    if (_45 instanceof View.HintClicked) {
         return [ Model.Hint.value ];
     };
-    if (_48 instanceof View.GiveUpClicked) {
+    if (_45 instanceof View.GiveUpClicked) {
         return [ Model.GiveUp.value ];
     };
     throw new Error("Failed pattern match");
@@ -3676,14 +3676,14 @@ var DropCandidate = (function () {
     };
     return DropCandidate;
 })();
-var whenJust = function (_17) {
-    return function (_18) {
-        return function (_19) {
-            if (Data_Maybe.isJust(_17)) {
-                return _18;
+var whenJust = function (_14) {
+    return function (_15) {
+        return function (_16) {
+            if (Data_Maybe.isJust(_14)) {
+                return _15;
             };
             if (Prelude.otherwise) {
-                return _19;
+                return _16;
             };
             throw new Error("Failed pattern match");
         };
@@ -3696,9 +3696,9 @@ var whenJust = function (_17) {
 var targetArea = function (r) {
     return function (c) {
         return function (p) {
-            var isEmpty = function (_41) {
-                var _63 = Data_Maybe_Unsafe.fromJust(Model_Grid.lkup(_41.r - r)(_41.c - c)(p));
-                if (_63 instanceof Empty) {
+            var isEmpty = function (_38) {
+                var _50 = Data_Maybe_Unsafe.fromJust(Model_Grid.lkup(_38.r - r)(_38.c - c)(p));
+                if (_50 instanceof Empty) {
                     return true;
                 };
                 return false;
@@ -3716,14 +3716,14 @@ var targetArea = function (r) {
     };
 };
 var status = Model_Grid.lkup;
-var showSquare = new Prelude.Show(function (_27) {
-    if (_27 instanceof P) {
-        return "P" + Prelude.show(Prelude.showNumber)(_27.value0);
+var showSquare = new Prelude.Show(function (_24) {
+    if (_24 instanceof P) {
+        return "P" + Prelude.show(Prelude.showNumber)(_24.value0);
     };
-    if (_27 instanceof Obstacle) {
+    if (_24 instanceof Obstacle) {
         return "O";
     };
-    if (_27 instanceof Empty) {
+    if (_24 instanceof Empty) {
         return "E";
     };
     throw new Error("Failed pattern match");
@@ -3743,34 +3743,34 @@ var place = function (r) {
                  *  Otherwise, piece square wins
                  */
                 var rowEdge = r + Model_Grid.mrow(p);
-                var isValid = function (_33) {
-                    return function (_34) {
-                        if (_33 instanceof Empty) {
+                var isValid = function (_30) {
+                    return function (_31) {
+                        if (_30 instanceof Empty) {
                             return true;
                         };
-                        if (_34 instanceof Empty) {
+                        if (_31 instanceof Empty) {
                             return true;
                         };
                         return false;
                     };
                 };
-                var insertPiece = function (_35) {
-                    return function (_36) {
-                        if (_35 instanceof Empty) {
-                            return _36;
+                var insertPiece = function (_32) {
+                    return function (_33) {
+                        if (_32 instanceof Empty) {
+                            return _33;
                         };
-                        return _35;
+                        return _32;
                     };
                 };
                 var colEdge = c + Model_Grid.mcol(p);
                 var loc = Model_Grid.extract(r)(c)(rowEdge)(colEdge)(b);
                 var loc$prime = Model_Grid.zipWith(insertPiece)(p)(loc);
                 var validMove = rowEdge <= Model_Grid.mrow(b) && (colEdge <= Model_Grid.mcol(b) && Prelude["<<<"](Prelude.semigroupoidArr)(Data_Foldable.all(Data_Foldable.foldableArray)(Prelude.id(Prelude.categoryArr)))(Model_Grid.toArray)(Model_Grid.zipWith(isValid)(p)(loc)));
-                var _74 = !validMove;
-                if (_74) {
+                var _61 = !validMove;
+                if (_61) {
                     return Data_Maybe.Nothing.value;
                 };
-                if (!_74) {
+                if (!_61) {
                     return Data_Maybe.Just.create(Model_Grid.updateAt(r)(c)(loc$prime)(b));
                 };
                 throw new Error("Failed pattern match");
@@ -3778,8 +3778,8 @@ var place = function (r) {
         };
     };
 };
-var isP = function (_25) {
-    if (_25 instanceof P) {
+var isP = function (_22) {
+    if (_22 instanceof P) {
         return true;
     };
     return false;
@@ -3787,14 +3787,14 @@ var isP = function (_25) {
 var isOpen = function (r) {
     return function (c) {
         return function (grid) {
-            var _77 = Model_Grid.lkup(r)(c)(grid);
-            if (_77 instanceof Data_Maybe.Nothing) {
+            var _64 = Model_Grid.lkup(r)(c)(grid);
+            if (_64 instanceof Data_Maybe.Nothing) {
                 return false;
             };
-            if (_77 instanceof Data_Maybe.Just && _77.value0 instanceof Empty) {
+            if (_64 instanceof Data_Maybe.Just && _64.value0 instanceof Empty) {
                 return true;
             };
-            if (_77 instanceof Data_Maybe.Just) {
+            if (_64 instanceof Data_Maybe.Just) {
                 return false;
             };
             throw new Error("Failed pattern match");
@@ -3805,15 +3805,15 @@ var eqSquare = new Prelude.Eq(function (a) {
     return function (b) {
         return !Prelude["=="](eqSquare)(a)(b);
     };
-}, function (_28) {
-    return function (_29) {
-        if (_28 instanceof P && _29 instanceof P) {
-            return _28.value0 === _29.value0;
+}, function (_25) {
+    return function (_26) {
+        if (_25 instanceof P && _26 instanceof P) {
+            return _25.value0 === _26.value0;
         };
-        if (_28 instanceof Obstacle && _29 instanceof Obstacle) {
+        if (_25 instanceof Obstacle && _26 instanceof Obstacle) {
             return true;
         };
-        if (_28 instanceof Empty && _29 instanceof Empty) {
+        if (_25 instanceof Empty && _26 instanceof Empty) {
             return true;
         };
         return false;
@@ -3826,11 +3826,11 @@ var eqSquare = new Prelude.Eq(function (a) {
 var findPiece = function (p) {
     return function (b) {
         return Model_Grid.map(function (s) {
-            var _84 = Prelude["=="](eqSquare)(s)(p);
-            if (_84) {
+            var _71 = Prelude["=="](eqSquare)(s)(p);
+            if (_71) {
                 return p;
             };
-            if (!_84) {
+            if (!_71) {
                 return Empty.value;
             };
             throw new Error("Failed pattern match");
@@ -3839,27 +3839,27 @@ var findPiece = function (p) {
 };
 var ordSquare = new Prelude.Ord(function () {
     return eqSquare;
-}, function (_30) {
-    return function (_31) {
-        if (_30 instanceof Empty && _31 instanceof Empty) {
+}, function (_27) {
+    return function (_28) {
+        if (_27 instanceof Empty && _28 instanceof Empty) {
             return Prelude.EQ.value;
         };
-        if (_30 instanceof Empty) {
+        if (_27 instanceof Empty) {
             return Prelude.LT.value;
         };
-        if (_30 instanceof P && _31 instanceof P) {
-            return Prelude.compare(Prelude.ordNumber)(_30.value0)(_31.value0);
+        if (_27 instanceof P && _28 instanceof P) {
+            return Prelude.compare(Prelude.ordNumber)(_27.value0)(_28.value0);
         };
-        if (_30 instanceof P && _31 instanceof Empty) {
+        if (_27 instanceof P && _28 instanceof Empty) {
             return Prelude.GT.value;
         };
-        if (_30 instanceof P && _31 instanceof Obstacle) {
+        if (_27 instanceof P && _28 instanceof Obstacle) {
             return Prelude.LT.value;
         };
-        if (_30 instanceof Obstacle && _31 instanceof Obstacle) {
+        if (_27 instanceof Obstacle && _28 instanceof Obstacle) {
             return Prelude.EQ.value;
         };
-        if (_30 instanceof Obstacle) {
+        if (_27 instanceof Obstacle) {
             return Prelude.GT.value;
         };
         throw new Error("Failed pattern match");
@@ -3880,31 +3880,31 @@ var pieces = function (b) {
 var remove = function (r) {
     return function (c) {
         return function (b) {
-            var go = function (_37) {
-                return function (_38) {
-                    return function (_39) {
-                        return function (_40) {
-                            if (_37 instanceof Data_Maybe.Nothing) {
-                                return _40;
+            var go = function (_34) {
+                return function (_35) {
+                    return function (_36) {
+                        return function (_37) {
+                            if (_34 instanceof Data_Maybe.Nothing) {
+                                return _37;
                             };
-                            if (_37 instanceof Data_Maybe.Just) {
-                                var _95 = Model_Grid.lkup(_38)(_39)(_40);
-                                if (_95 instanceof Data_Maybe.Nothing) {
-                                    return _40;
+                            if (_34 instanceof Data_Maybe.Just) {
+                                var _82 = Model_Grid.lkup(_35)(_36)(_37);
+                                if (_82 instanceof Data_Maybe.Nothing) {
+                                    return _37;
                                 };
-                                if (_95 instanceof Data_Maybe.Just && _95.value0 instanceof Empty) {
-                                    return _40;
+                                if (_82 instanceof Data_Maybe.Just && _82.value0 instanceof Empty) {
+                                    return _37;
                                 };
-                                if (_95 instanceof Data_Maybe.Just && _95.value0 instanceof Obstacle) {
-                                    return _40;
+                                if (_82 instanceof Data_Maybe.Just && _82.value0 instanceof Obstacle) {
+                                    return _37;
                                 };
-                                if (_95 instanceof Data_Maybe.Just) {
-                                    var _98 = Prelude["/="](eqSquare)(_95.value0)(_37.value0);
-                                    if (_98) {
-                                        return _40;
+                                if (_82 instanceof Data_Maybe.Just) {
+                                    var _85 = Prelude["/="](eqSquare)(_82.value0)(_34.value0);
+                                    if (_85) {
+                                        return _37;
                                     };
-                                    if (!_98) {
-                                        return go(_37)(_38)(_39 - 1)(go(_37)(_38)(_39 + 1)(go(_37)(_38 - 1)(_39)(go(_37)(_38 + 1)(_39)(Model_Grid.updateAt(_38)(_39)(Model_Grid.singleton(Empty.value))(_40)))));
+                                    if (!_85) {
+                                        return go(_34)(_35)(_36 - 1)(go(_34)(_35)(_36 + 1)(go(_34)(_35 - 1)(_36)(go(_34)(_35 + 1)(_36)(Model_Grid.updateAt(_35)(_36)(Model_Grid.singleton(Empty.value))(_37)))));
                                     };
                                     throw new Error("Failed pattern match");
                                 };
@@ -3919,168 +3919,174 @@ var remove = function (r) {
         };
     };
 };
-var updateGame = function (_15) {
-    return function (_16) {
-        if (_15 instanceof TogglePiece) {
-            if (_16.selectedPiece instanceof Data_Maybe.Nothing) {
-                var _104 = {};
-                for (var _105 in _16) {
-                    if (_16.hasOwnProperty(_105)) {
-                        _104[_105] = _16[_105];
+var updateGame = function (_12) {
+    return function (_13) {
+        if (Data_Maybe.isJust(_13.victory)) {
+            return _13;
+        };
+        if (_12 instanceof TogglePiece) {
+            if (_13.selectedPiece instanceof Data_Maybe.Nothing) {
+                var _91 = {};
+                for (var _92 in _13) {
+                    if (_13.hasOwnProperty(_92)) {
+                        _91[_92] = _13[_92];
                     };
                 };
-                _104.selectedPiece = new Data_Maybe.Just(_15.value0);
-                return _104;
+                _91.selectedPiece = new Data_Maybe.Just(_12.value0);
+                return _91;
             };
-            if (_16.selectedPiece instanceof Data_Maybe.Just) {
-                if (Prelude["=="](Prelude.eqArray(Prelude.eqArray(eqSquare)))(_15.value0)(_16.selectedPiece.value0)) {
-                    var _106 = {};
-                    for (var _107 in _16) {
-                        if (_16.hasOwnProperty(_107)) {
-                            _106[_107] = _16[_107];
+            if (_13.selectedPiece instanceof Data_Maybe.Just) {
+                if (Prelude["=="](Prelude.eqArray(Prelude.eqArray(eqSquare)))(_12.value0)(_13.selectedPiece.value0)) {
+                    var _93 = {};
+                    for (var _94 in _13) {
+                        if (_13.hasOwnProperty(_94)) {
+                            _93[_94] = _13[_94];
                         };
                     };
-                    _106.selectedPiece = Data_Maybe.Nothing.value;
-                    return _106;
+                    _93.selectedPiece = Data_Maybe.Nothing.value;
+                    return _93;
                 };
                 if (Prelude.otherwise) {
-                    var _108 = {};
-                    for (var _109 in _16) {
-                        if (_16.hasOwnProperty(_109)) {
-                            _108[_109] = _16[_109];
+                    var _95 = {};
+                    for (var _96 in _13) {
+                        if (_13.hasOwnProperty(_96)) {
+                            _95[_96] = _13[_96];
                         };
                     };
-                    _108.selectedPiece = new Data_Maybe.Just(_15.value0);
-                    return _108;
+                    _95.selectedPiece = new Data_Maybe.Just(_12.value0);
+                    return _95;
                 };
             };
             throw new Error("Failed pattern match");
         };
-        if (_15 instanceof TargetDrop) {
-            if (_16.selectedPiece instanceof Data_Maybe.Nothing) {
-                return _16;
+        if (_12 instanceof TargetDrop) {
+            if (_13.selectedPiece instanceof Data_Maybe.Nothing) {
+                return _13;
             };
-            if (_16.selectedPiece instanceof Data_Maybe.Just) {
-                var _113 = {};
-                for (var _114 in _16) {
-                    if (_16.hasOwnProperty(_114)) {
-                        _113[_114] = _16[_114];
+            if (_13.selectedPiece instanceof Data_Maybe.Just) {
+                var _100 = {};
+                for (var _101 in _13) {
+                    if (_13.hasOwnProperty(_101)) {
+                        _100[_101] = _13[_101];
                     };
                 };
-                _113.dropTarget = new DropCandidate(targetArea(_15.value0)(_15.value1)(_16.selectedPiece.value0), Data_Maybe.isJust(place(_15.value0)(_15.value1)(_16.selectedPiece.value0)(_16.board)));
-                return _113;
+                _100.dropTarget = new DropCandidate(targetArea(_12.value0)(_12.value1)(_13.selectedPiece.value0), Data_Maybe.isJust(place(_12.value0)(_12.value1)(_13.selectedPiece.value0)(_13.board)));
+                return _100;
             };
             throw new Error("Failed pattern match");
         };
-        if (_15 instanceof DiscardDrop) {
-            if (_16.dropTarget.value0.length === 0) {
-                return _16;
+        if (_12 instanceof DiscardDrop) {
+            if (_13.dropTarget.value0.length === 0) {
+                return _13;
             };
-            var _121 = {};
-            for (var _122 in _16) {
-                if (_16.hasOwnProperty(_122)) {
-                    _121[_122] = _16[_122];
+            var _108 = {};
+            for (var _109 in _13) {
+                if (_13.hasOwnProperty(_109)) {
+                    _108[_109] = _13[_109];
                 };
             };
-            _121.dropTarget = new DropCandidate([  ], true);
-            return _121;
+            _108.dropTarget = new DropCandidate([  ], true);
+            return _108;
         };
-        if (_15 instanceof Drop) {
-            var _125 = Prelude[">>="](Data_Maybe.bindMaybe)(_16.selectedPiece)(Prelude.flip(place(_15.value0)(_15.value1))(_16.board));
-            if (_125 instanceof Data_Maybe.Nothing) {
-                return _16;
+        if (_12 instanceof Drop) {
+            var _112 = Prelude[">>="](Data_Maybe.bindMaybe)(_13.selectedPiece)(Prelude.flip(place(_12.value0)(_12.value1))(_13.board));
+            if (_112 instanceof Data_Maybe.Nothing) {
+                return _13;
             };
-            if (_125 instanceof Data_Maybe.Just) {
-                var piecesLeft = Data_Array["delete"](Prelude.eqArray(Prelude.eqArray(eqSquare)))(Data_Maybe_Unsafe.fromJust(_16.selectedPiece))(_16.piecesLeft);
-                var _127 = {};
-                for (var _128 in _16) {
-                    if (_16.hasOwnProperty(_128)) {
-                        _127[_128] = _16[_128];
+            if (_112 instanceof Data_Maybe.Just) {
+                var piecesLeft = Data_Array["delete"](Prelude.eqArray(Prelude.eqArray(eqSquare)))(Data_Maybe_Unsafe.fromJust(_13.selectedPiece))(_13.piecesLeft);
+                var _114 = {};
+                for (var _115 in _13) {
+                    if (_13.hasOwnProperty(_115)) {
+                        _114[_115] = _13[_115];
                     };
                 };
-                _127.board = _125.value0;
-                _127.selectedPiece = Data_Maybe.Nothing.value;
-                _127.piecesLeft = piecesLeft;
-                _127.dropTarget = new DropCandidate([  ], true);
-                _127.victory = (function () {
-                    var _126 = Data_Array.length(piecesLeft) === 0;
-                    if (_126) {
+                _114.board = _112.value0;
+                _114.selectedPiece = Data_Maybe.Nothing.value;
+                _114.piecesLeft = piecesLeft;
+                _114.dropTarget = new DropCandidate([  ], true);
+                _114.victory = (function () {
+                    var _113 = Data_Array.length(piecesLeft) === 0;
+                    if (_113) {
                         return new Data_Maybe.Just(true);
                     };
-                    if (!_126) {
+                    if (!_113) {
                         return Data_Maybe.Nothing.value;
                     };
                     throw new Error("Failed pattern match");
                 })();
-                return _127;
+                return _114;
             };
             throw new Error("Failed pattern match");
         };
-        if (_15 instanceof Remove) {
-            var _132 = {};
-            for (var _133 in _16) {
-                if (_16.hasOwnProperty(_133)) {
-                    _132[_133] = _16[_133];
+        if (_12 instanceof Remove) {
+            var _119 = {};
+            for (var _120 in _13) {
+                if (_13.hasOwnProperty(_120)) {
+                    _119[_120] = _13[_120];
                 };
             };
-            _132.board = remove(_15.value0)(_15.value1)(_16.board);
-            _132.piecesLeft = Prelude[":"](findPiece(new P(_15.value2))(_16.board))(_16.piecesLeft);
-            return _132;
+            _119.board = remove(_12.value0)(_12.value1)(_13.board);
+            _119.piecesLeft = Prelude[":"](findPiece(new P(_12.value2))(_13.board))(_13.piecesLeft);
+            return _119;
         };
-        if (_15 instanceof Hint) {
-            if (_16.selectedPiece instanceof Data_Maybe.Nothing) {
-                return _16;
+        if (_12 instanceof Hint && Data_Array.length(_13.piecesLeft) === 1) {
+            return _13;
+        };
+        if (_12 instanceof Hint) {
+            if (_13.selectedPiece instanceof Data_Maybe.Nothing) {
+                return _13;
             };
-            if (_16.selectedPiece instanceof Data_Maybe.Just) {
-                var sel = Data_Maybe_Unsafe.fromJust(Data_Foldable.find(Data_Foldable.foldableArray)(isP)(Model_Grid.toArray(_16.selectedPiece.value0)));
-                var noObs = function (_26) {
-                    if (_26 instanceof Obstacle) {
+            if (_13.selectedPiece instanceof Data_Maybe.Just) {
+                var sel = Data_Maybe_Unsafe.fromJust(Data_Foldable.find(Data_Foldable.foldableArray)(isP)(Model_Grid.toArray(_13.selectedPiece.value0)));
+                var noObs = function (_23) {
+                    if (_23 instanceof Obstacle) {
                         return Empty.value;
                     };
-                    if (Prelude["/="](eqSquare)(sel)(_26)) {
+                    if (Prelude["/="](eqSquare)(sel)(_23)) {
                         return Empty.value;
                     };
                     if (Prelude.otherwise) {
-                        return _26;
+                        return _23;
                     };
                     throw new Error("Failed pattern match");
                 };
-                var newPieces = Data_Array["delete"](Prelude.eqArray(Prelude.eqArray(eqSquare)))(Data_Maybe_Unsafe.fromJust(_16.selectedPiece))(_16.piecesLeft);
-                var cleanObs = Model_Grid.map(noObs)(_16.solution);
-                var loc = Data_Maybe_Unsafe.fromJust(Model_Grid.findIndex(eqSquare)(_16.selectedPiece.value0)(cleanObs));
-                var newBoard = place(loc.r)(loc.c)(_16.selectedPiece.value0)(_16.board);
+                var newPieces = Data_Array["delete"](Prelude.eqArray(Prelude.eqArray(eqSquare)))(Data_Maybe_Unsafe.fromJust(_13.selectedPiece))(_13.piecesLeft);
+                var cleanObs = Model_Grid.map(noObs)(_13.solution);
+                var loc = Data_Maybe_Unsafe.fromJust(Model_Grid.findIndex(eqSquare)(_13.selectedPiece.value0)(cleanObs));
+                var newBoard = place(loc.r)(loc.c)(_13.selectedPiece.value0)(_13.board);
                 if (newBoard instanceof Data_Maybe.Nothing) {
-                    return _16;
+                    return _13;
                 };
                 if (newBoard instanceof Data_Maybe.Just) {
-                    var _140 = {};
-                    for (var _141 in _16) {
-                        if (_16.hasOwnProperty(_141)) {
-                            _140[_141] = _16[_141];
+                    var _127 = {};
+                    for (var _128 in _13) {
+                        if (_13.hasOwnProperty(_128)) {
+                            _127[_128] = _13[_128];
                         };
                     };
-                    _140.board = newBoard.value0;
-                    _140.piecesLeft = newPieces;
-                    _140.dropTarget = new DropCandidate([  ], true);
-                    _140.selectedPiece = Data_Maybe.Nothing.value;
-                    return _140;
+                    _127.board = newBoard.value0;
+                    _127.piecesLeft = newPieces;
+                    _127.dropTarget = new DropCandidate([  ], true);
+                    _127.selectedPiece = Data_Maybe.Nothing.value;
+                    return _127;
                 };
                 throw new Error("Failed pattern match");
             };
             throw new Error("Failed pattern match");
         };
-        if (_15 instanceof GiveUp) {
-            var _144 = {};
-            for (var _145 in _16) {
-                if (_16.hasOwnProperty(_145)) {
-                    _144[_145] = _16[_145];
+        if (_12 instanceof GiveUp) {
+            var _131 = {};
+            for (var _132 in _13) {
+                if (_13.hasOwnProperty(_132)) {
+                    _131[_132] = _13[_132];
                 };
             };
-            _144.board = _16.solution;
-            _144.victory = new Data_Maybe.Just(false);
-            _144.selectedPiece = Data_Maybe.Nothing.value;
-            _144.piecesLeft = [  ];
-            return _144;
+            _131.board = _13.solution;
+            _131.victory = new Data_Maybe.Just(false);
+            _131.selectedPiece = Data_Maybe.Nothing.value;
+            _131.piecesLeft = [  ];
+            return _131;
         };
         throw new Error("Failed pattern match");
     };
@@ -4099,20 +4105,20 @@ var directions = [ {
     dr: -1, 
     dc: 0
 } ];
-var generateAt = function (_20) {
-    return function (_21) {
-        return function (_22) {
-            return function (_23) {
-                return function (_24) {
-                    if (!isOpen(_20)(_21)(_24)) {
+var generateAt = function (_17) {
+    return function (_18) {
+        return function (_19) {
+            return function (_20) {
+                return function (_21) {
+                    if (!isOpen(_17)(_18)(_21)) {
                         return Prelude["return"](Control_Monad_Eff.monadEff)({
-                            g: _24, 
+                            g: _21, 
                             sCnt: 0
                         });
                     };
-                    if (_23 === 0) {
+                    if (_20 === 0) {
                         return Prelude["return"](Control_Monad_Eff.monadEff)({
-                            g: _24, 
+                            g: _21, 
                             sCnt: 0
                         });
                     };
@@ -4122,20 +4128,20 @@ var generateAt = function (_20) {
                             var go = function (acc) {
                                 return function (d) {
                                     return function __do() {
-                                        var _0 = generateAt(_20 + d.dr)(_21 + d.dc)(_22)(_23 - acc.sCnt)(acc.g)();
-                                        var _153 = {};
-                                        for (var _154 in _0) {
-                                            if (_0.hasOwnProperty(_154)) {
-                                                _153[_154] = _0[_154];
+                                        var _0 = generateAt(_17 + d.dr)(_18 + d.dc)(_19)(_20 - acc.sCnt)(acc.g)();
+                                        var _140 = {};
+                                        for (var _141 in _0) {
+                                            if (_0.hasOwnProperty(_141)) {
+                                                _140[_141] = _0[_141];
                                             };
                                         };
-                                        _153.sCnt = acc.sCnt + _0.sCnt;
-                                        return _153;
+                                        _140.sCnt = acc.sCnt + _0.sCnt;
+                                        return _140;
                                     };
                                 };
                             };
                             return Control_Monad.foldM(Control_Monad_Eff.monadEff)(go)({
-                                g: Model_Grid.updateAt(_20)(_21)(Model_Grid.singleton(new P(_22)))(_24), 
+                                g: Model_Grid.updateAt(_17)(_18)(Model_Grid.singleton(new P(_19)))(_21), 
                                 sCnt: 1
                             })(_1);
                         })()();
@@ -4160,21 +4166,21 @@ var mkBoard = function (nr) {
                         return {
                             g: _2.g, 
                             i: (function () {
-                                var _156 = _2.sCnt === 0;
-                                if (_156) {
+                                var _143 = _2.sCnt === 0;
+                                if (_143) {
                                     return acc.i;
                                 };
-                                if (!_156) {
+                                if (!_143) {
                                     return acc.i + 1;
                                 };
                                 throw new Error("Failed pattern match");
                             })(), 
                             incompletes: (function () {
-                                var _157 = _2.sCnt > 0 && _2.sCnt < pieceLength;
-                                if (_157) {
+                                var _144 = _2.sCnt > 0 && _2.sCnt < pieceLength;
+                                if (_144) {
                                     return Prelude[":"](acc.i)(acc.incompletes);
                                 };
-                                if (!_157) {
+                                if (!_144) {
                                     return acc.incompletes;
                                 };
                                 throw new Error("Failed pattern match");
@@ -4198,18 +4204,18 @@ var mkBoard = function (nr) {
                     incompletes: [  ]
                 })(_6)();
                 return (function () {
-                    var replacer = function (_32) {
-                        if (_32 instanceof P) {
-                            var _165 = Data_Array.elemIndex(Prelude.eqNumber)(_32.value0)(_5.incompletes) !== -1;
-                            if (_165) {
+                    var replacer = function (_29) {
+                        if (_29 instanceof P) {
+                            var _152 = Data_Array.elemIndex(Prelude.eqNumber)(_29.value0)(_5.incompletes) !== -1;
+                            if (_152) {
                                 return Obstacle.value;
                             };
-                            if (!_165) {
-                                return _32;
+                            if (!_152) {
+                                return _29;
                             };
                             throw new Error("Failed pattern match");
                         };
-                        return _32;
+                        return _29;
                     };
                     var withObstacles = Model_Grid.map(replacer)(_5.g);
                     return Prelude["return"](Control_Monad_Eff.monadEff)(withObstacles);
@@ -4223,11 +4229,11 @@ var mkBoard = function (nr) {
  *  Clear pieces off the board.
  */
 var clear = Model_Grid.map(function (p) {
-    var _167 = isP(p);
-    if (_167) {
+    var _154 = isP(p);
+    if (_154) {
         return Empty.value;
     };
-    if (!_167) {
+    if (!_154) {
         return p;
     };
     throw new Error("Failed pattern match");
@@ -5396,11 +5402,11 @@ var viewButtons = function (chan) {
         })([ VirtualDOM_VTree.vnode("button")({
             attributes: {
                 disabled: (function () {
-                    var _168 = Data_Maybe.isNothing(mSel);
-                    if (_168) {
+                    var _155 = Data_Maybe.isNothing(mSel);
+                    if (_155) {
                         return def;
                     };
-                    if (!_168) {
+                    if (!_155) {
                         return undef;
                     };
                     throw new Error("Failed pattern match");
@@ -5416,13 +5422,13 @@ var foldpE = Data_Function.runFn4(foldpEP)(Signal.constant);
 var viewRender = function (init) {
     return function (svt) {
         var n = VirtualDOM.createElement(init);
-        var updateDOM = function (_46) {
-            return function (_47) {
+        var updateDOM = function (_43) {
+            return function (_44) {
                 return function __do() {
-                    var _9 = VirtualDOM.patch(VirtualDOM.diff(_47.t)(_46))(_47.n)();
+                    var _9 = VirtualDOM.patch(VirtualDOM.diff(_44.t)(_43))(_44.n)();
                     return {
                         n: _9, 
-                        t: _46
+                        t: _43
                     };
                 };
             };
@@ -5440,14 +5446,14 @@ var colorMap = function (n) {
     var colors = [ "red", "blue", "green", "orange", "yellow", "magenta", "cyan", "gray" ];
     return Data_Maybe_Unsafe.fromJust(Data_Array["!!"](colors)(n % Data_Array.length(colors)));
 };
-var viewBoard = function (_43) {
-    return function (_44) {
-        return function (_45) {
+var viewBoard = function (_40) {
+    return function (_41) {
+        return function (_42) {
             var inTarget = function (r) {
                 return function (c) {
-                    return Data_Foldable.any(Data_Foldable.foldableArray)(function (_42) {
-                        return r === _42.r && c === _42.c;
-                    })(_44.value0);
+                    return Data_Foldable.any(Data_Foldable.foldableArray)(function (_39) {
+                        return r === _39.r && c === _39.c;
+                    })(_41.value0);
                 };
             };
             var mkAttr = function (s) {
@@ -5460,19 +5466,19 @@ var viewBoard = function (_43) {
                                 width: s, 
                                 height: s, 
                                 "class": (function () {
-                                    var _180 = inTarget(r)(c);
-                                    if (_180) {
+                                    var _167 = inTarget(r)(c);
+                                    if (_167) {
                                         return clss + (function () {
-                                            if (_44.value1) {
+                                            if (_41.value1) {
                                                 return " valid";
                                             };
-                                            if (!_44.value1) {
+                                            if (!_41.value1) {
                                                 return " invalid";
                                             };
                                             throw new Error("Failed pattern match");
                                         })();
                                     };
-                                    if (!_180) {
+                                    if (!_167) {
                                         return clss;
                                     };
                                     throw new Error("Failed pattern match");
@@ -5484,29 +5490,29 @@ var viewBoard = function (_43) {
             };
             var getCell = function (r) {
                 return function (c) {
-                    return Data_Maybe_Unsafe.fromJust(Model.status(r)(c)(_45));
+                    return Data_Maybe_Unsafe.fromJust(Model.status(r)(c)(_42));
                 };
             };
             var exitHook = function (r) {
                 return function (c) {
-                    return hook("mouseleave")(Prelude["const"](Signal_Channel.send(_43)(new SquareExited(r, c))));
+                    return hook("mouseleave")(Prelude["const"](Signal_Channel.send(_40)(new SquareExited(r, c))));
                 };
             };
             var enterHook = function (r) {
                 return function (c) {
-                    return hook("mouseenter")(Prelude["const"](Signal_Channel.send(_43)(new SquareEntered(r, c))));
+                    return hook("mouseenter")(Prelude["const"](Signal_Channel.send(_40)(new SquareEntered(r, c))));
                 };
             };
             var clickHook = function (r) {
                 return function (c) {
-                    return hook("click")(Prelude["const"](Signal_Channel.send(_43)(new SquareClicked(r, c))));
+                    return hook("click")(Prelude["const"](Signal_Channel.send(_40)(new SquareClicked(r, c))));
                 };
             };
             var boardCell = function (s) {
                 return function (r) {
                     return function (c) {
-                        var _182 = getCell(r)(c);
-                        if (_182 instanceof Model.Empty) {
+                        var _169 = getCell(r)(c);
+                        if (_169 instanceof Model.Empty) {
                             return Data_Maybe.Just.create(VirtualDOM_VTree.vnode("rect")({
                                 attributes: mkAttr(s)(r)(c)("empty"), 
                                 namespace: svgn, 
@@ -5515,7 +5521,7 @@ var viewBoard = function (_43) {
                                 click: clickHook(r)(c)
                             })([  ]));
                         };
-                        if (_182 instanceof Model.Obstacle) {
+                        if (_169 instanceof Model.Obstacle) {
                             return Data_Maybe.Just.create(VirtualDOM_VTree.vnode("rect")({
                                 attributes: mkAttr(s)(r)(c)("obstacle"), 
                                 namespace: svgn, 
@@ -5524,21 +5530,21 @@ var viewBoard = function (_43) {
                                 click: clickHook(r)(c)
                             })([  ]));
                         };
-                        if (_182 instanceof Model.P) {
+                        if (_169 instanceof Model.P) {
                             return Data_Maybe.Just.create(VirtualDOM_VTree.vnode("rect")({
                                 attributes: {
                                     x: c * s, 
                                     y: r * s, 
                                     width: s, 
                                     height: s, 
-                                    fill: colorMap(_182.value0), 
+                                    fill: colorMap(_169.value0), 
                                     "class": "psquare"
                                 }, 
                                 enter: enterHook(r)(c), 
                                 exit: exitHook(r)(c), 
                                 click: clickHook(r)(c), 
                                 namespace: svgn, 
-                                dblclick: hook("dblclick")(Prelude["const"](Signal_Channel.send(_43)(new SquareDblClicked(r, c, _182.value0))))
+                                dblclick: hook("dblclick")(Prelude["const"](Signal_Channel.send(_40)(new SquareDblClicked(r, c, _169.value0))))
                             })([  ]));
                         };
                         throw new Error("Failed pattern match");
@@ -5547,7 +5553,7 @@ var viewBoard = function (_43) {
             };
             return VirtualDOM_VTree.vnode("div")({
                 id: "board"
-            })([ svgGrid(Model_Grid.rows(_45))(Model_Grid.cols(_45))(boardCell) ]);
+            })([ svgGrid(Model_Grid.rows(_42))(Model_Grid.cols(_42))(boardCell) ]);
         };
     };
 };
@@ -5565,21 +5571,21 @@ var viewPieces = function (chan) {
                 return function (s) {
                     return function (r) {
                         return function (c) {
-                            var _186 = getCell(r)(c)(p);
-                            if (_186 instanceof Model.Empty) {
+                            var _173 = getCell(r)(c)(p);
+                            if (_173 instanceof Model.Empty) {
                                 return Data_Maybe.Nothing.value;
                             };
-                            if (_186 instanceof Model.Obstacle) {
+                            if (_173 instanceof Model.Obstacle) {
                                 return Data_Maybe.Nothing.value;
                             };
-                            if (_186 instanceof Model.P) {
+                            if (_173 instanceof Model.P) {
                                 return Data_Maybe.Just.create(VirtualDOM_VTree.vnode("rect")({
                                     attributes: {
                                         x: c * s, 
                                         y: r * s, 
                                         width: s, 
                                         height: s, 
-                                        fill: colorMap(_186.value0), 
+                                        fill: colorMap(_173.value0), 
                                         "class": "psquare"
                                     }, 
                                     namespace: svgn
@@ -5594,11 +5600,11 @@ var viewPieces = function (chan) {
                 return VirtualDOM_VTree.vnode("div")({
                     attributes: {
                         "class": (function () {
-                            var _188 = Prelude["=="](Data_Maybe.eqMaybe(Prelude.eqArray(Prelude.eqArray(Model.eqSquare))))(new Data_Maybe.Just(p))(mSel);
-                            if (_188) {
+                            var _175 = Prelude["=="](Data_Maybe.eqMaybe(Prelude.eqArray(Prelude.eqArray(Model.eqSquare))))(new Data_Maybe.Just(p))(mSel);
+                            if (_175) {
                                 return "piece selected";
                             };
-                            if (!_188) {
+                            if (!_175) {
                                 return "piece";
                             };
                             throw new Error("Failed pattern match");

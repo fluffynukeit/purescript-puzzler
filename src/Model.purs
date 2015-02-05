@@ -25,6 +25,8 @@ processUpdates :: [GameAction] -> GameState -> GameState
 processUpdates =  flip (foldl (flip updateGame))
 
 updateGame :: GameAction -> GameState -> GameState
+updateGame _ s | isJust s.victory = s -- if game is over, never update state
+
 updateGame (TogglePiece p) s =
   case s.selectedPiece of
     Nothing -> s { selectedPiece = Just p }
@@ -56,6 +58,7 @@ updateGame (Drop r c) s =
 updateGame (Remove r c id) s = 
   s {board=remove r c s.board, piecesLeft=(findPiece (P id) s.board):s.piecesLeft}
 
+updateGame Hint s | A.length s.piecesLeft == 1 = s -- don't allow final piece to hint
 updateGame Hint s =
   case s.selectedPiece of
     Nothing -> s
