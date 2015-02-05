@@ -3189,29 +3189,29 @@ var Prelude = require("Prelude");
 var Model = require("Model");
 var View = require("View");
 var Signal = require("Signal");
-var intent = function (_9) {
-    if (_9 instanceof View.Init) {
+var intent = function (_45) {
+    if (_45 instanceof View.Init) {
         return [  ];
     };
-    if (_9 instanceof View.PieceClicked) {
-        return [ new Model.TogglePiece(_9.value0) ];
+    if (_45 instanceof View.PieceClicked) {
+        return [ new Model.TogglePiece(_45.value0) ];
     };
-    if (_9 instanceof View.SquareEntered) {
-        return [ new Model.TargetDrop(_9.value0, _9.value1) ];
+    if (_45 instanceof View.SquareEntered) {
+        return [ new Model.TargetDrop(_45.value0, _45.value1) ];
     };
-    if (_9 instanceof View.SquareExited) {
-        return [ new Model.DiscardDrop(_9.value0, _9.value1) ];
+    if (_45 instanceof View.SquareExited) {
+        return [ new Model.DiscardDrop(_45.value0, _45.value1) ];
     };
-    if (_9 instanceof View.SquareClicked) {
-        return [ new Model.Drop(_9.value0, _9.value1) ];
+    if (_45 instanceof View.SquareClicked) {
+        return [ new Model.Drop(_45.value0, _45.value1) ];
     };
-    if (_9 instanceof View.SquareDblClicked) {
-        return [ new Model.Remove(_9.value0, _9.value1, _9.value2) ];
+    if (_45 instanceof View.SquareDblClicked) {
+        return [ new Model.Remove(_45.value0, _45.value1, _45.value2) ];
     };
-    if (_9 instanceof View.HintClicked) {
+    if (_45 instanceof View.HintClicked) {
         return [ Model.Hint.value ];
     };
-    if (_9 instanceof View.GiveUpClicked) {
+    if (_45 instanceof View.GiveUpClicked) {
         return [ Model.GiveUp.value ];
     };
     throw new Error("Failed pattern match");
@@ -3233,12 +3233,12 @@ var Control_Monad_Eff = require("Control.Monad.Eff");
 var VirtualDOM_VTree = require("VirtualDOM.VTree");
 var Signal_Time = require("Signal.Time");
 var main = function __do() {
-    var _2 = Model.mkBoard(10)(10)(4)();
-    var _1 = Signal_Channel.channel(View.Init.value)();
+    var _11 = Model.mkBoard(10)(10)(4)();
+    var _10 = Signal_Channel.channel(View.Init.value)();
     return (function () {
-        var actions = Signal["<~"](Signal.functorSignal)(Intent.intent)(Signal_Channel.subscribe(_1));
-        var states = Signal.foldp(Model.processUpdates)(Model.gameInit(_2))(actions);
-        var views = Signal["<~"](Signal.functorSignal)(View.puzzlerView(_1))(Signal["distinct'"](states));
+        var actions = Signal["<~"](Signal.functorSignal)(Intent.intent)(Signal_Channel.subscribe(_10));
+        var states = Signal.foldp(Model.processUpdates)(Model.gameInit(_11))(actions);
+        var views = Signal["<~"](Signal.functorSignal)(View.puzzlerView(_10))(Signal["distinct'"](states));
         return View.windowOnLoad(View.viewRender(View.puzzlerInit)(views));
     })()();
 };
@@ -3921,6 +3921,9 @@ var remove = function (r) {
 };
 var updateGame = function (_12) {
     return function (_13) {
+        if (Data_Maybe.isJust(_13.victory)) {
+            return _13;
+        };
         if (_12 instanceof TogglePiece) {
             if (_13.selectedPiece instanceof Data_Maybe.Nothing) {
                 var _91 = {};
@@ -4026,6 +4029,9 @@ var updateGame = function (_12) {
             _119.board = remove(_12.value0)(_12.value1)(_13.board);
             _119.piecesLeft = Prelude[":"](findPiece(new P(_12.value2))(_13.board))(_13.piecesLeft);
             return _119;
+        };
+        if (_12 instanceof Hint && Data_Array.length(_13.piecesLeft) === 1) {
+            return _13;
         };
         if (_12 instanceof Hint) {
             if (_13.selectedPiece instanceof Data_Maybe.Nothing) {
@@ -5396,11 +5402,11 @@ var viewButtons = function (chan) {
         })([ VirtualDOM_VTree.vnode("button")({
             attributes: {
                 disabled: (function () {
-                    var _10 = Data_Maybe.isNothing(mSel);
-                    if (_10) {
+                    var _155 = Data_Maybe.isNothing(mSel);
+                    if (_155) {
                         return def;
                     };
-                    if (!_10) {
+                    if (!_155) {
                         return undef;
                     };
                     throw new Error("Failed pattern match");
@@ -5416,13 +5422,13 @@ var foldpE = Data_Function.runFn4(foldpEP)(Signal.constant);
 var viewRender = function (init) {
     return function (svt) {
         var n = VirtualDOM.createElement(init);
-        var updateDOM = function (_7) {
-            return function (_8) {
+        var updateDOM = function (_43) {
+            return function (_44) {
                 return function __do() {
-                    var _0 = VirtualDOM.patch(VirtualDOM.diff(_8.t)(_7))(_8.n)();
+                    var _9 = VirtualDOM.patch(VirtualDOM.diff(_44.t)(_43))(_44.n)();
                     return {
-                        n: _0, 
-                        t: _7
+                        n: _9, 
+                        t: _43
                     };
                 };
             };
@@ -5440,14 +5446,14 @@ var colorMap = function (n) {
     var colors = [ "red", "blue", "green", "orange", "yellow", "magenta", "cyan", "gray" ];
     return Data_Maybe_Unsafe.fromJust(Data_Array["!!"](colors)(n % Data_Array.length(colors)));
 };
-var viewBoard = function (_4) {
-    return function (_5) {
-        return function (_6) {
+var viewBoard = function (_40) {
+    return function (_41) {
+        return function (_42) {
             var inTarget = function (r) {
                 return function (c) {
-                    return Data_Foldable.any(Data_Foldable.foldableArray)(function (_3) {
-                        return r === _3.r && c === _3.c;
-                    })(_5.value0);
+                    return Data_Foldable.any(Data_Foldable.foldableArray)(function (_39) {
+                        return r === _39.r && c === _39.c;
+                    })(_41.value0);
                 };
             };
             var mkAttr = function (s) {
@@ -5460,19 +5466,19 @@ var viewBoard = function (_4) {
                                 width: s, 
                                 height: s, 
                                 "class": (function () {
-                                    var _22 = inTarget(r)(c);
-                                    if (_22) {
+                                    var _167 = inTarget(r)(c);
+                                    if (_167) {
                                         return clss + (function () {
-                                            if (_5.value1) {
+                                            if (_41.value1) {
                                                 return " valid";
                                             };
-                                            if (!_5.value1) {
+                                            if (!_41.value1) {
                                                 return " invalid";
                                             };
                                             throw new Error("Failed pattern match");
                                         })();
                                     };
-                                    if (!_22) {
+                                    if (!_167) {
                                         return clss;
                                     };
                                     throw new Error("Failed pattern match");
@@ -5484,29 +5490,29 @@ var viewBoard = function (_4) {
             };
             var getCell = function (r) {
                 return function (c) {
-                    return Data_Maybe_Unsafe.fromJust(Model.status(r)(c)(_6));
+                    return Data_Maybe_Unsafe.fromJust(Model.status(r)(c)(_42));
                 };
             };
             var exitHook = function (r) {
                 return function (c) {
-                    return hook("mouseleave")(Prelude["const"](Signal_Channel.send(_4)(new SquareExited(r, c))));
+                    return hook("mouseleave")(Prelude["const"](Signal_Channel.send(_40)(new SquareExited(r, c))));
                 };
             };
             var enterHook = function (r) {
                 return function (c) {
-                    return hook("mouseenter")(Prelude["const"](Signal_Channel.send(_4)(new SquareEntered(r, c))));
+                    return hook("mouseenter")(Prelude["const"](Signal_Channel.send(_40)(new SquareEntered(r, c))));
                 };
             };
             var clickHook = function (r) {
                 return function (c) {
-                    return hook("click")(Prelude["const"](Signal_Channel.send(_4)(new SquareClicked(r, c))));
+                    return hook("click")(Prelude["const"](Signal_Channel.send(_40)(new SquareClicked(r, c))));
                 };
             };
             var boardCell = function (s) {
                 return function (r) {
                     return function (c) {
-                        var _24 = getCell(r)(c);
-                        if (_24 instanceof Model.Empty) {
+                        var _169 = getCell(r)(c);
+                        if (_169 instanceof Model.Empty) {
                             return Data_Maybe.Just.create(VirtualDOM_VTree.vnode("rect")({
                                 attributes: mkAttr(s)(r)(c)("empty"), 
                                 namespace: svgn, 
@@ -5515,7 +5521,7 @@ var viewBoard = function (_4) {
                                 click: clickHook(r)(c)
                             })([  ]));
                         };
-                        if (_24 instanceof Model.Obstacle) {
+                        if (_169 instanceof Model.Obstacle) {
                             return Data_Maybe.Just.create(VirtualDOM_VTree.vnode("rect")({
                                 attributes: mkAttr(s)(r)(c)("obstacle"), 
                                 namespace: svgn, 
@@ -5524,21 +5530,21 @@ var viewBoard = function (_4) {
                                 click: clickHook(r)(c)
                             })([  ]));
                         };
-                        if (_24 instanceof Model.P) {
+                        if (_169 instanceof Model.P) {
                             return Data_Maybe.Just.create(VirtualDOM_VTree.vnode("rect")({
                                 attributes: {
                                     x: c * s, 
                                     y: r * s, 
                                     width: s, 
                                     height: s, 
-                                    fill: colorMap(_24.value0), 
+                                    fill: colorMap(_169.value0), 
                                     "class": "psquare"
                                 }, 
                                 enter: enterHook(r)(c), 
                                 exit: exitHook(r)(c), 
                                 click: clickHook(r)(c), 
                                 namespace: svgn, 
-                                dblclick: hook("dblclick")(Prelude["const"](Signal_Channel.send(_4)(new SquareDblClicked(r, c, _24.value0))))
+                                dblclick: hook("dblclick")(Prelude["const"](Signal_Channel.send(_40)(new SquareDblClicked(r, c, _169.value0))))
                             })([  ]));
                         };
                         throw new Error("Failed pattern match");
@@ -5547,7 +5553,7 @@ var viewBoard = function (_4) {
             };
             return VirtualDOM_VTree.vnode("div")({
                 id: "board"
-            })([ svgGrid(Model_Grid.rows(_6))(Model_Grid.cols(_6))(boardCell) ]);
+            })([ svgGrid(Model_Grid.rows(_42))(Model_Grid.cols(_42))(boardCell) ]);
         };
     };
 };
@@ -5565,21 +5571,21 @@ var viewPieces = function (chan) {
                 return function (s) {
                     return function (r) {
                         return function (c) {
-                            var _28 = getCell(r)(c)(p);
-                            if (_28 instanceof Model.Empty) {
+                            var _173 = getCell(r)(c)(p);
+                            if (_173 instanceof Model.Empty) {
                                 return Data_Maybe.Nothing.value;
                             };
-                            if (_28 instanceof Model.Obstacle) {
+                            if (_173 instanceof Model.Obstacle) {
                                 return Data_Maybe.Nothing.value;
                             };
-                            if (_28 instanceof Model.P) {
+                            if (_173 instanceof Model.P) {
                                 return Data_Maybe.Just.create(VirtualDOM_VTree.vnode("rect")({
                                     attributes: {
                                         x: c * s, 
                                         y: r * s, 
                                         width: s, 
                                         height: s, 
-                                        fill: colorMap(_28.value0), 
+                                        fill: colorMap(_173.value0), 
                                         "class": "psquare"
                                     }, 
                                     namespace: svgn
@@ -5594,11 +5600,11 @@ var viewPieces = function (chan) {
                 return VirtualDOM_VTree.vnode("div")({
                     attributes: {
                         "class": (function () {
-                            var _30 = Prelude["=="](Data_Maybe.eqMaybe(Prelude.eqArray(Prelude.eqArray(Model.eqSquare))))(new Data_Maybe.Just(p))(mSel);
-                            if (_30) {
+                            var _175 = Prelude["=="](Data_Maybe.eqMaybe(Prelude.eqArray(Prelude.eqArray(Model.eqSquare))))(new Data_Maybe.Just(p))(mSel);
+                            if (_175) {
                                 return "piece selected";
                             };
-                            if (!_30) {
+                            if (!_175) {
                                 return "piece";
                             };
                             throw new Error("Failed pattern match");
